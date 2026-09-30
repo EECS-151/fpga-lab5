@@ -1,14 +1,16 @@
 source ../target.tcl
 
 # Read Verilog source files
-if {[string trim ${RTL_FPGA}] ne ""} {
-  read_verilog -v ${RTL_FPGA}
+if {[string trim ${RTL}] ne ""} {
+  read_verilog -v ${RTL}
 }
 
 # Read user constraints
 if {[string trim ${CONSTRAINTS}] ne ""} {
   read_xdc ${CONSTRAINTS}
 }
+
+# TODO
 
 synth_design -top ${TOP} -part ${FPGA_PART}
 

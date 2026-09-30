@@ -37,7 +37,7 @@ module system_tb();
 
   logic [7:0] tests_failed = 0;
 
-  z1top_sim #(
+  zu3top_sim #(
       .B_SAMPLE_CNT_MAX(`B_SAMPLE_CNT_MAX),
       .B_PULSE_CNT_MAX(`B_PULSE_CNT_MAX),
       .CLOCK_FREQ(`CLOCK_FREQ),

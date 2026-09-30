@@ -1,4 +1,4 @@
-module z1top #(
+module zu3top_sim #(
     parameter CLOCK_FREQ = 100_000_000,
     parameter BAUD_RATE = 115_200,
     /* verilator lint_off REALCVT */
@@ -19,11 +19,7 @@ module z1top #(
 );
 
     wire CLK_100;
-    IBUFDS ibufds_clk (
-        .I(CLK_100_P),
-        .IB(CLK_100_N),
-        .O(CLK_100)
-    );
+	assign CLK_100 = CLK_100_P;
     
     wire [2:0] buttons_pressed;
     wire reset;
