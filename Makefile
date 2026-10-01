@@ -26,6 +26,47 @@ sim/%.fsdb: sim/%.tb
 verdi: sim/$(TB).fsdb
 	$(VERDI) -dbdir sim/$(TB).tb.daidir -ssf sim/$(TB).fsdb &
 
+# UVM testbench for the memory controller (sim/uvm). Usage:
+#   make sim-uvm [UVM_TEST=mem_smoke_test]   build if needed, run one test
+#                [UVM_ARGS=+UVM_VERBOSITY=UVM_HIGH]   extra simulator arguments
+#   make uvm-report                          merge the coverage of every test run so far
+#   make uvm-clean                           delete the coverage of every test run so far
+#   make uvm-verdi [UVM_TEST=...]            open that test's waveform
+UVM_TEST                ?= mem_smoke_test
+UVM_DIR                 := $(strip $(ABS_TOP))/sim/uvm
+UVM_BUILD               := build/uvm
+UVM_SRCS                := $(wildcard $(UVM_DIR)/*.sv $(UVM_DIR)/*.svh)
+URG                     ?= $(VCS_HOME)/bin/urg
+# Plain "-ntb_opts uvm" selects UVM 1.1; name the IEEE 1800.2-2020 library explicitly.
+UVM_VCS_OPTS            := -notice -sverilog -kdb -timescale=1ns/10ps -debug_access+all \
+                           -ntb_opts uvm-ieee-2020-3.1 +incdir+$(UVM_DIR)
+
+# mem_if.sv must come before mem_uvm_pkg.sv, which must come before mem_tb_top.sv.
+$(UVM_BUILD)/simv: $(RTL) $(UVM_SRCS)
+	mkdir -p $(UVM_BUILD)
+	cd $(UVM_BUILD) && $(VCS) $(UVM_VCS_OPTS) -o simv -cm_dir mem_uvm.vdb \
+	    -y $(ABS_TOP)/src +libext+.sv+.v \
+	    $(UVM_DIR)/mem_if.sv $(UVM_DIR)/mem_uvm_pkg.sv $(UVM_DIR)/mem_tb_top.sv \
+	    -top mem_tb_top |& tee compile.log
+
+# Fails (non-zero exit) unless the log ends with "[ passed ]".
+sim-uvm: $(UVM_BUILD)/simv
+	cd $(UVM_BUILD) && ./simv +UVM_TESTNAME=$(UVM_TEST) -cm_name $(UVM_TEST) \
+	    +fsdbfile+$(UVM_TEST).fsdb $(UVM_ARGS) |& tee $(UVM_TEST).log
+	@grep -q '^\[ passed \]' $(UVM_BUILD)/$(UVM_TEST).log
+
+uvm-report:
+	cd $(UVM_BUILD) && $(URG) -full64 -dir mem_uvm.vdb -format both -report urgReport > urg.log 2>&1
+	@echo "Tests merged:"; sed -n 's|^mem_uvm/|  |p' $(UVM_BUILD)/urgReport/tests.txt
+	@echo "mem_txn_cg merged score: $$(grep -A1 '^SCORE' $(UVM_BUILD)/urgReport/groups.txt | awk 'NR==2 {print $$1}')%"
+	@echo "Full report: $(UVM_BUILD)/urgReport/dashboard.html"
+
+uvm-clean:
+	rm -rf $(UVM_BUILD)/mem_uvm.vdb/snps/coverage/db/testdata $(UVM_BUILD)/urgReport
+
+uvm-verdi:
+	$(VERDI) -dbdir $(UVM_BUILD)/simv.daidir -ssf $(UVM_BUILD)/$(UVM_TEST).fsdb &
+
 build/target.tcl: $(RTL) $(CONSTRAINTS)
 	mkdir -p build
 	truncate -s 0 $@
@@ -108,5 +149,6 @@ clean:
 	novas.* \
 	verdiLog 
 
-.PHONY: setup synth impl program program-force vivado all clean verdi %.tb
+.PHONY: setup synth impl program program-force vivado all clean verdi %.tb \
+        sim-uvm uvm-report uvm-clean uvm-verdi
 .PRECIOUS: sim/%.tb sim/%.tbi sim/%.fst sim/%.vpd
