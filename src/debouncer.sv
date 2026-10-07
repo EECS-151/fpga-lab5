@@ -5,8 +5,8 @@ module debouncer #(
     parameter WRAPPING_CNT_WIDTH = $clog2(SAMPLE_CNT_MAX),
     parameter SAT_CNT_WIDTH      = $clog2(PULSE_CNT_MAX) + 1
 ) (
-    input logic clk,
-    input logic [WIDTH-1:0] glitchy_signal,
+    input wire logic clk,
+    input wire logic [WIDTH-1:0] glitchy_signal,
     output logic [WIDTH-1:0] debounced_signal
 );
     // TODO: Fill in neccesary logic to implement the wrapping counter and the saturating counters

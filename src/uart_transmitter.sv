@@ -2,11 +2,11 @@ module uart_transmitter #(
     parameter CLOCK_FREQ = 125_000_000,
     parameter BAUD_RATE = 115_200)
 (
-    input logic clk,
-    input logic reset,
+    input wire logic clk,
+    input wire logic reset,
 
-    input logic [7:0] data_in,
-    input logic data_in_valid,
+    input wire logic [7:0] data_in,
+    input wire logic data_in_valid,
     output logic data_in_ready,
 
     output logic serial_out

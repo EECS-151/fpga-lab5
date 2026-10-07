@@ -1,8 +1,8 @@
 module edge_detector #(
     parameter WIDTH = 1
 )(
-    input logic clk,
-    input logic [WIDTH-1:0] signal_in,
+    input wire logic clk,
+    input wire logic [WIDTH-1:0] signal_in,
     output logic [WIDTH-1:0] edge_detect_pulse
 );
     // TODO: Implement a multi-bit edge detector that detects a rising edge of 'signal_in[x]'

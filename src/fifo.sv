@@ -3,15 +3,15 @@ module fifo #(
     parameter DEPTH = 32,
     parameter POINTER_WIDTH = $clog2(DEPTH)
 ) (
-    input logic clk, rst,
+    input wire logic clk, rst,
 
     // Write side
-    input logic wr_en,
-    input logic [WIDTH-1:0] din,
+    input wire logic wr_en,
+    input wire logic [WIDTH-1:0] din,
     output logic full,
 
     // Read side
-    input logic rd_en,
+    input wire logic rd_en,
     output logic [WIDTH-1:0] dout,
     output logic empty
 );
