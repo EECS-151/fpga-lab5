@@ -4,8 +4,8 @@ module button_parser #(
     parameter SAMPLE_CNT_MAX = 62500,
     parameter PULSE_CNT_MAX = 200
 ) (
-    input logic clk,
-    input logic [WIDTH-1:0] in,
+    input wire logic clk,
+    input wire logic [WIDTH-1:0] in,
     output logic [WIDTH-1:0] out
 );
     logic [WIDTH-1:0] synchronized_signals;

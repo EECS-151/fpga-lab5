@@ -4,11 +4,11 @@ module memory #(
     parameter NUM_BYTES_PER_WORD = MEM_WIDTH/8,
     parameter MEM_ADDR_WIDTH = $clog2(DEPTH)
 ) (
-    input logic clk,
-    input logic en, 
-    input logic [NUM_BYTES_PER_WORD-1:0] we,
-    input logic [MEM_ADDR_WIDTH-1:0] addr,
-    input logic [MEM_WIDTH-1:0] din,
+    input wire logic clk,
+    input wire logic en, 
+    input wire logic [NUM_BYTES_PER_WORD-1:0] we,
+    input wire logic [MEM_ADDR_WIDTH-1:0] addr,
+    input wire logic [MEM_WIDTH-1:0] din,
     output logic [MEM_WIDTH-1:0] dout
 );
     // No change needs to be made for this file

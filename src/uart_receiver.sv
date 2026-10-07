@@ -2,14 +2,14 @@ module uart_receiver #(
     parameter CLOCK_FREQ = 125_000_000,
     parameter BAUD_RATE = 115_200)
 (
-    input logic clk,
-    input logic reset,
+    input wire logic clk,
+    input wire logic reset,
 
     output logic [7:0] data_out,
     output logic data_out_valid,
-    input logic data_out_ready,
+    input wire logic data_out_ready,
 
-    input logic serial_in
+    input wire logic serial_in
 );
     // See diagram in the lab guide
     localparam SYMBOL_EDGE_TIME = CLOCK_FREQ / BAUD_RATE;

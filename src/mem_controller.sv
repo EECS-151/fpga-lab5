@@ -1,11 +1,11 @@
 module mem_controller #(
   parameter FIFO_WIDTH = 8
 ) (
-  input logic clk,
-  input logic rst,
-  input logic rx_fifo_empty,
-  input logic tx_fifo_full,
-  input logic [FIFO_WIDTH-1:0] din,
+  input wire logic clk,
+  input wire logic rst,
+  input wire logic rx_fifo_empty,
+  input wire logic tx_fifo_full,
+  input wire logic [FIFO_WIDTH-1:0] din,
 
   output logic rx_fifo_rd_en,
   output logic tx_fifo_wr_en,

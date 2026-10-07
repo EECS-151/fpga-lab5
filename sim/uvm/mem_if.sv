@@ -15,7 +15,7 @@
 `include "uvm_macros.svh"
 
 interface mem_if (
-  input logic clk
+  input wire logic clk
 );
   import uvm_pkg::*;
 

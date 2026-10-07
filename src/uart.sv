@@ -2,18 +2,18 @@ module uart #(
     parameter CLOCK_FREQ = 125_000_000,
     parameter BAUD_RATE = 115_200
 ) (
-    input logic clk,
-    input logic reset,
+    input wire logic clk,
+    input wire logic reset,
 
-    input logic [7:0] data_in,
-    input logic data_in_valid,
+    input wire logic [7:0] data_in,
+    input wire logic data_in_valid,
     output logic data_in_ready,
 
     output logic [7:0] data_out,
     output logic data_out_valid,
-    input logic data_out_ready,
+    input wire logic data_out_ready,
 
-    input logic serial_in,
+    input wire logic serial_in,
     output logic serial_out
 );
     logic serial_in_reg, serial_out_reg;

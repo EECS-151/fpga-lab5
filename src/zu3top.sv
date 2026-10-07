@@ -14,8 +14,8 @@ module zu3top #(
     input wire [3:0] BUTTONS,
     input wire [7:0] SWITCHES,
     output wire [7:0] LEDS,
-    input FPGA_SERIAL_RX,
-    output FPGA_SERIAL_TX
+    input wire FPGA_SERIAL_RX,
+    output wire FPGA_SERIAL_TX
 );
 
     wire CLK_100;
