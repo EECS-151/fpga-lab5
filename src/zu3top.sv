@@ -9,12 +9,12 @@ module zu3top #(
     /* lint_on */
     parameter CYCLES_PER_SECOND = 100_000_000
 ) (
-    input wire CLK_100_P,
-    input wire CLK_100_N,
-    input wire [3:0] BUTTONS,
-    input wire [7:0] SWITCHES,
+    input wire logic CLK_100_P,
+    input wire logic CLK_100_N,
+    input wire logic [3:0] BUTTONS,
+    input wire logic [7:0] SWITCHES,
     output wire [7:0] LEDS,
-    input wire FPGA_SERIAL_RX,
+    input wire logic FPGA_SERIAL_RX,
     output wire FPGA_SERIAL_TX
 );
 
