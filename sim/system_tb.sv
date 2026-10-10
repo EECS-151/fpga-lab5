@@ -148,27 +148,13 @@ module system_tb();
     end
   endtask 
 
-  integer z;
   initial begin
-
-    `ifndef IVERILOG
-        $vcdpluson;
-	      $vcdplusmemon;
-    `endif
-    `ifdef IVERILOG
-        $dumpfile("system_tb.fst");
-        $dumpvars(0, system_tb);
-        for(z = 0; z < MEM_DEPTH; z = z + 1) begin
-            // to show each entry of the 2D logic in your mem on the waveform
-            $dumpvars(0, top.mem_ctrl.mem.mem[z]);
-        end
-        for(z = 0; z < FIFO_DEPTH; z = z + 1) begin
-            // to show each entry of the 2D regs in your FIFOs on the waveform
-            // Uncomment the following lines and replace "data" with the name of your 2D logic
-            // $dumpvars(0, top.rx_fifo.data[z]);
-            // $dumpvars(0, top.tx_fifo.data[z]);
-        end
-    `endif
+    string fsdb_file;
+    if (!$value$plusargs("fsdbfile+%s", fsdb_file)) begin
+        fsdb_file = "default.fsdb";
+    end
+    $fsdbDumpfile(fsdb_file);
+    $fsdbDumpvars(0, system_tb);
     off_chip_data_in = 8'd0;
     off_chip_data_in_valid = 1'b0;
     off_chip_data_out_ready = 1'b1;
@@ -212,10 +198,6 @@ module system_tb();
     else
         $display("\n%d tests FAILED.\n", tests_failed);
 
-    `ifndef IVERILOG
-        $vcdplusoff;
-        $vcdplusmemoff;
-    `endif
     $finish();
 
   end
@@ -252,7 +234,5 @@ module system_tb();
       $fatal();
   end
 endmodule
-
-
 
 

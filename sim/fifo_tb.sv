@@ -116,21 +116,13 @@ module fifo_tb();
   integer read_idx = 0;
   integer read_start = 0;
 
-  integer z;
   initial begin: TB
-    `ifndef IVERILOG
-        $vcdpluson;
-        $vcdplusmemon;
-    `endif
-    `ifdef IVERILOG
-        $dumpfile("fifo_tb.fst");
-        $dumpvars(0, fifo_tb);
-        for(z = 0; z < DEPTH; z = z + 1) begin
-            // TODO: replace this line with a path to the 2D logic in your FIFO
-            // to show each entry in the waveform
-            // $dumpvars(0, dut.memory[z]);
-        end
-    `endif
+    string fsdb_file;
+    if (!$value$plusargs("fsdbfile+%s", fsdb_file)) begin
+        fsdb_file = "default.fsdb";
+    end
+    $fsdbDumpfile(fsdb_file);
+    $fsdbDumpvars(0, fifo_tb);
 
     $display("This testbench was run with these params:");
     $display("CLK_PERIOD = %d, WIDTH = %d, DEPTH = %d", `CLK_PERIOD, WIDTH, DEPTH);

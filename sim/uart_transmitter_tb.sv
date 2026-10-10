@@ -109,14 +109,13 @@ module uart_transmitter_tb();
   integer num_mismatches = 0;
 
   initial begin
+    string fsdb_file;
     #0;
-    `ifdef IVERILOG
-        $dumpfile("uart_transmitter_tb.fst");
-        $dumpvars(0, uart_transmitter_tb);
-    `endif
-    `ifndef IVERILOG
-        $vcdpluson;
-    `endif
+    if (!$value$plusargs("fsdbfile+%s", fsdb_file)) begin
+        fsdb_file = "default.fsdb";
+    end
+    $fsdbDumpfile(fsdb_file);
+    $fsdbDumpvars(0, uart_transmitter_tb);
 
     rst = 1'b1;
     cnt = 0;

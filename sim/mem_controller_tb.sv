@@ -245,27 +245,14 @@ module mem_controller_tb();
     endtask
     
 
-    integer i, z;
+    integer i;
     initial begin: TB
-
-        `ifndef IVERILOG
-            $vcdpluson;
-            $vcdplusmemon;
-        `endif
-        `ifdef IVERILOG
-            $dumpfile("mem_controller_tb.fst");
-            $dumpvars(0, mem_controller_tb);
-            for(z = 0; z < MEM_DEPTH; z = z + 1) begin
-                // to show each entry of the 2D logic in your mem on the waveform
-                $dumpvars(0, mem_ctrl.mem.mem[z]);
-            end
-            for(z = 0; z < FIFO_DEPTH; z = z + 1) begin
-                // to show each entry of the 2D regs in your FIFOs on the waveform
-                // Uncomment the following lines and replace "data" with the name of your 2D logic
-                // $dumpvars(0, rx_fifo.data[z]);
-                // $dumpvars(0, tx_fifo.data[z]);
-            end
-        `endif
+        string fsdb_file;
+        if (!$value$plusargs("fsdbfile+%s", fsdb_file)) begin
+            fsdb_file = "default.fsdb";
+        end
+        $fsdbDumpfile(fsdb_file);
+        $fsdbDumpvars(0, mem_controller_tb);
 
         /* Initialize write sequence */
         for (i = 0; i < NUM_WRITES; i += 1) begin
@@ -384,11 +371,6 @@ module mem_controller_tb();
 
         repeat (50) @(posedge clk);
 
-
-        `ifndef IVERILOG
-            $vcdplusoff;
-            $vcdplusmemoff;
-        `endif
         $finish();
     end
 

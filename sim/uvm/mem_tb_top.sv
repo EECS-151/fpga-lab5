@@ -79,7 +79,12 @@ module mem_tb_top;
   end
 
   initial begin
-    $fsdbDumpvars(0, mem_tb_top, "+all");
+    string fsdb_file;
+    if (!$value$plusargs("fsdbfile+%s", fsdb_file)) begin
+      fsdb_file = "default.fsdb";
+    end
+    $fsdbDumpfile(fsdb_file);
+    $fsdbDumpvars(0, mem_tb_top);
     // "uvm_test_top*" is the test and every component below it, so the
     // test, the driver and the monitor all get this interface.
     uvm_config_db#(mem_vif)::set(null, "uvm_test_top*", "vif", mem_if_i);
